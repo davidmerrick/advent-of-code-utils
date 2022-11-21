@@ -12,12 +12,8 @@ plugins {
 }
 
 reckon {
-    snapshots()
     setStageCalc(calcStageFromProp())
-    setScopeCalc(
-        calcScopeFromProp()
-            .or(calcScopeFromCommitMessages())
-    )
+    setScopeCalc(calcScopeFromProp().or(calcScopeFromCommitMessages()))
 }
 
 dependencies {

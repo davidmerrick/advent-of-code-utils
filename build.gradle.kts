@@ -12,6 +12,7 @@ plugins {
 }
 
 reckon {
+    stages("release")
     setStageCalc(calcStageFromProp())
     setScopeCalc(calcScopeFromProp().or(calcScopeFromCommitMessages()))
 }

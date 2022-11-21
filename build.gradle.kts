@@ -21,6 +21,8 @@ reckon {
 }
 
 dependencies {
+    implementation("com.google.guava:guava:31.1-jre")
+
     testImplementation("org.spekframework.spek2:spek-runner-junit5:2.0.18")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0")

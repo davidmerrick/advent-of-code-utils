@@ -1,12 +1,10 @@
-package io.github.davidmerrick.aoc
+package io.github.davidmerrick.aoc.util
 
-import io.github.davidmerrick.aoc.util.isPalindrome
 import io.kotlintest.shouldBe
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
 class StringExtensionsTest {
-
     @TestFactory
     fun `isPalindrome test`() = listOf(
         "abba" to true,

@@ -20,6 +20,25 @@ fun <V> HashBasedTable<Int, Int, V>.fill(width: Int, height: Int, value: V) {
     }
 }
 
+/**
+ * Behaves similarly to Kotlin's Map.compute().
+ * Iterates a range of cells from the starting coords (row, column) to
+ * the dimensions (width, height) and sets the value in each cell to the one
+ * specified by the computeValue() function.
+ */
+fun <V> HashBasedTable<Int, Int, V>.compute(
+    coords: Pair<Int, Int>,
+    dimensions: Pair<Int, Int>,
+    computeValue: (V?) -> V
+) {
+    for (row in coords.first until coords.first + dimensions.first) {
+        for (column in coords.second until coords.second + dimensions.second) {
+            computeValue(this.get(row, column))
+                .let { this.put(row, column, it) }
+        }
+    }
+}
+
 fun <R, C, V> HashBasedTable<R, C, V>.print(valueTransform: (V) -> String = { it.toString() }) = buildString {
     rowMap().map { it.value }.forEach { row ->
         row.map { valueTransform(it.value) }.forEach { append(it) }

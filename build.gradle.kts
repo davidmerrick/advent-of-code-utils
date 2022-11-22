@@ -8,13 +8,6 @@ repositories {
 plugins {
     `maven-publish`
     kotlin("jvm") version "1.7.20"
-    id("org.ajoberstar.reckon") version "0.16.1"
-}
-
-reckon {
-    stages("release")
-    setStageCalc(calcStageFromProp())
-    setScopeCalc(calcScopeFromProp().or(calcScopeFromCommitMessages()))
 }
 
 dependencies {

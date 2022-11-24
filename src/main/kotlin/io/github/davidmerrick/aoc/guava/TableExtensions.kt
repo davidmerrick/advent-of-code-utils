@@ -45,3 +45,11 @@ fun <R, C, V> HashBasedTable<R, C, V>.print(valueTransform: (V) -> String = { it
         append("\n")
     }
 }
+
+fun <R, C, V> HashBasedTable<R, C, V>.printIndexed(valueTransform: (R, C, V) -> String) = buildString {
+    rowMap().forEach { row ->
+        row.value
+            .map { valueTransform(row.key, it.key, it.value) }.forEach { append(it) }
+        append("\n")
+    }
+}

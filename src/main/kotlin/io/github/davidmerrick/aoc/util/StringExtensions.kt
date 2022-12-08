@@ -42,3 +42,7 @@ fun String.getPalindromes(length: Int): List<String> {
         .forEach { if (it.isPalindrome()) palindromes.add(it) }
     return palindromes.toList()
 }
+
+public inline fun Iterable<String>.filterNotEmpty(): List<String> {
+    return filterNotTo(ArrayList()) { it.isEmpty() }
+}

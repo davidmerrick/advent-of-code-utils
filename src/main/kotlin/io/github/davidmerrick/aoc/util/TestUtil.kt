@@ -20,12 +20,13 @@ object TestUtil {
     }
 
     /**
-     * Returns a trimmed String of the file's contents
+     * Returns a String of the file's contents
+     * Trimmed, by default
      */
-    fun readText(thisClass: KClass<out Any>, fileName: String): String {
+    fun readText(thisClass: KClass<out Any>, fileName: String, trim: Boolean = true): String {
         return bufferedReader(thisClass, fileName)
             .readText()
-            .trim()
+            .let { if (trim) it.trim() else it }
     }
 
     /**

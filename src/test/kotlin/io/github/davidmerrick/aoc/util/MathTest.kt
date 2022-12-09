@@ -11,4 +11,9 @@ class MathTest {
         (-5 to 5).manhattanDistanceTo(5 to -5) shouldBe 20
         (5 to 0).manhattanDistanceTo(5 to 5) shouldBe 5
     }
+
+    @Test
+    fun `Product test`() {
+        listOf(1, 2, 3).product() shouldBe 6
+    }
 }

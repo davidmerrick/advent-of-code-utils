@@ -63,6 +63,40 @@ fun <R, C, V> HashBasedTable<R, C, V>.asSequence(): Sequence<TableEntry<R, C, V>
         }
 }
 
+/**
+ * Returns a list of values given a row and a column range to search
+ * rangeStart is inclusive; rangeEnd is exclusive
+ */
+fun <V> HashBasedTable<Int, Int, V>.columnRange(
+    row: Int,
+    rangeStart: Int,
+    rangeEnd: Int
+): List<V> {
+    val table = this
+    return buildList {
+        for (column in rangeStart until rangeEnd) {
+            add(table.get(row, column)!!)
+        }
+    }
+}
+
+/**
+ * Returns a list of values given a column and a row range to search
+ * rangeStart is inclusive; rangeEnd is exclusive
+ */
+fun <V> HashBasedTable<Int, Int, V>.rowRange(
+    column: Int,
+    rangeStart: Int,
+    rangeEnd: Int
+): List<V> {
+    val table = this
+    return buildList {
+        for (row in rangeStart until rangeEnd) {
+            add(table.get(row, column)!!)
+        }
+    }
+}
+
 fun <V> parseTable(input: List<List<V>>): HashBasedTable<Int, Int, V> {
     val table = HashBasedTable.create<Int, Int, V>()
     for (row in input.indices) {

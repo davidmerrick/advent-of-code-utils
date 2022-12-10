@@ -43,6 +43,8 @@ fun String.getPalindromes(length: Int): List<String> {
     return palindromes.toList()
 }
 
+fun List<String>.mapToInts(): List<List<Int>> = this.map { line -> line.map { it.toString().toInt() } }
+
 public inline fun Iterable<String>.filterNotEmpty(): List<String> {
     return filterNotTo(ArrayList()) { it.isEmpty() }
 }

@@ -53,3 +53,28 @@ fun <R, C, V> HashBasedTable<R, C, V>.printIndexed(valueTransform: (R, C, V) -> 
         append("\n")
     }
 }
+
+fun <R, C, V> HashBasedTable<R, C, V>.asSequence(): Sequence<TableEntry<R, C, V>> {
+    return this.rowMap().asSequence()
+        .flatMap { row ->
+            row.value.asSequence().map { column ->
+                TableEntry(row.key, column.key, column.value)
+            }
+        }
+}
+
+fun <V> parseTable(input: List<List<V>>): HashBasedTable<Int, Int, V> {
+    val table = HashBasedTable.create<Int, Int, V>()
+    for (row in input.indices) {
+        for (column in input[0].indices) {
+            table.put(row, column, input[row][column])
+        }
+    }
+    return table
+}
+
+class TableEntry<R, C, V>(
+    val row: R,
+    val column: C,
+    val value: V
+)

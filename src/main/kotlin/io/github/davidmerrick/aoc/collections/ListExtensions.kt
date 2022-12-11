@@ -1,4 +1,4 @@
-package io.github.davidmerrick.aoc.util
+package io.github.davidmerrick.aoc.collections
 
 /**
  * Finds the min value in a list matching the selector

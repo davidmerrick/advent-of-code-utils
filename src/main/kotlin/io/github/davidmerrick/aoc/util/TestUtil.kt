@@ -1,5 +1,6 @@
 package io.github.davidmerrick.aoc.util
 
+import io.github.davidmerrick.aoc.collections.filterNotEmpty
 import java.io.BufferedReader
 import kotlin.reflect.KClass
 

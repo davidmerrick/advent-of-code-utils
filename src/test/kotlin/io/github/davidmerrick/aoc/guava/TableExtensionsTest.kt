@@ -46,4 +46,22 @@ class TableExtensionsTest {
         neighbors.size shouldBe 4
         neighbors.map { it.value } shouldContainAll listOf('b', 'a', 'c', 'c')
     }
+
+    @Test
+    fun `Get neighbors at an edge`(){
+        val table = """
+            Sabqponm
+            abcryxxl
+            accszExk
+            acctuvwj
+            abdefghi
+        """.trimIndent()
+            .lines()
+            .toCharRows()
+            .let { parseTable(it) }
+
+        val neighbors = table.getNeighbors(0, 1)
+        neighbors.size shouldBe 3
+        neighbors.map { it.value } shouldContainAll listOf('S', 'b', 'b')
+    }
 }

@@ -66,7 +66,7 @@ fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
             for (c in column - 1..column + 1) {
                 if (Pos(r, c).manhattanDistance(Pos(row, column)) > 1 && !includeDiagonals) continue
                 if (r == row && c == column) continue
-                this.add(getEntry(r, c))
+                getEntry(r, c)?.let { this.add(it) }
             }
         }
     }
@@ -77,8 +77,10 @@ fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
     includeDiagonals: Boolean = false
 ) = getNeighbors(pos.y, pos.x, includeDiagonals)
 
-fun <R, C, V> HashBasedTable<R, C, V>.getEntry(row: R, column: C): TableEntry<R, C, V> {
-    return TableEntry(row, column, this.get(row, column)!!)
+fun <R, C, V> HashBasedTable<R, C, V>.getEntry(row: R, column: C): TableEntry<R, C, V>? {
+    return this.get(row, column)?.let {
+        TableEntry(row, column, it)
+    }
 }
 
 fun <R, C, V> HashBasedTable<R, C, V>.asSequence(): Sequence<TableEntry<R, C, V>> {

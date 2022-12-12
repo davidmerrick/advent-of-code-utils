@@ -1,7 +1,12 @@
 package io.github.davidmerrick.aoc.guava
 
 import com.google.common.collect.HashBasedTable
+import io.github.davidmerrick.aoc.collections.toCharRows
+import io.github.davidmerrick.aoc.collections.toIntRows
+import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.matchers.collections.shouldContainInOrder
+import io.kotlintest.should
+import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
 class TableExtensionsTest {
@@ -22,5 +27,23 @@ class TableExtensionsTest {
         table.put(1, 0, "bar")
         table.put(2, 0, "baz")
         table.columnList(0) shouldContainInOrder listOf("foo", "bar", "baz")
+    }
+
+    @Test
+    fun `Get neighbors`(){
+        val table = """
+            Sabqponm
+            abcryxxl
+            accszExk
+            acctuvwj
+            abdefghi
+        """.trimIndent()
+            .lines()
+            .toCharRows()
+            .let { parseTable(it) }
+
+        val neighbors = table.getNeighbors(2, 1)
+        neighbors.size shouldBe 4
+        neighbors.map { it.value } shouldContainAll listOf('b', 'a', 'c', 'c')
     }
 }

@@ -1,6 +1,8 @@
 package io.github.davidmerrick.aoc.guava
 
 import com.google.common.collect.HashBasedTable
+import io.github.davidmerrick.aoc.coordinates.Pos
+import io.github.davidmerrick.aoc.coordinates.manhattanDistance
 
 fun <R, C, V> HashBasedTable<R, C, V>.rowList(row: R): List<V> {
     require(this.rowMap().containsKey(row))
@@ -52,6 +54,31 @@ fun <R, C, V> HashBasedTable<R, C, V>.printIndexed(valueTransform: (R, C, V) -> 
             .map { valueTransform(row.key, it.key, it.value) }.forEach { append(it) }
         append("\n")
     }
+}
+
+fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
+    row: Int,
+    column: Int,
+    includeDiagonals: Boolean = false
+): List<TableEntry<Int, Int, V>> {
+    return buildList {
+        for (r in row - 1..row + 1) {
+            for (c in column - 1..column + 1) {
+                if (Pos(r, c).manhattanDistance(Pos(row, column)) > 1 && !includeDiagonals) continue
+                if (r == row && c == column) continue
+                this.add(getEntry(r, c))
+            }
+        }
+    }
+}
+
+fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
+    pos: Pos,
+    includeDiagonals: Boolean = false
+) = getNeighbors(pos.y, pos.x, includeDiagonals)
+
+fun <R, C, V> HashBasedTable<R, C, V>.getEntry(row: R, column: C): TableEntry<R, C, V> {
+    return TableEntry(row, column, this.get(row, column)!!)
 }
 
 fun <R, C, V> HashBasedTable<R, C, V>.asSequence(): Sequence<TableEntry<R, C, V>> {

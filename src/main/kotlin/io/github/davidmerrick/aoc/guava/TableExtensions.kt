@@ -83,6 +83,10 @@ fun <R, C, V> HashBasedTable<R, C, V>.getEntry(row: R, column: C): TableEntry<R,
     }
 }
 
+fun <V> HashBasedTable<Int, Int, V>.getEntry(pos: Pos): TableEntry<Int, Int, V>? {
+    return this.getEntry(pos.y, pos.x)
+}
+
 fun <R, C, V> HashBasedTable<R, C, V>.asSequence(): Sequence<TableEntry<R, C, V>> {
     return this.rowMap().asSequence()
         .flatMap { row ->
@@ -136,10 +140,82 @@ fun <V> parseTable(input: List<List<V>>): HashBasedTable<Int, Int, V> {
     return table
 }
 
-class TableEntry<R, C, V>(
+data class TableEntry<R, C, V>(
     val row: R,
     val column: C,
     val value: V
 )
 
 fun <V> TableEntry<Int, Int, V>.pos() = Pos(this.column, this.row)
+
+data class Path<V>(
+    val steps: List<TableEntry<Int, Int, V>> = listOf()
+) {
+    val length = steps.size - 1
+
+    /**
+     * Makes a copy of the path with the new step at the end
+     */
+    fun withStep(step: TableEntry<Int, Int, V>): Path<V> {
+        val newSteps = steps.toMutableList()
+        newSteps.add(step)
+        return this.copy(steps = newSteps)
+    }
+}
+
+fun <V> HashBasedTable<Int, Int, V>.getAdjacent(pos: Pos, adjacentIf: (V, V) -> Boolean): Set<Pos> {
+    val table = this
+    val value = table.get(pos.y, pos.x)!!
+    return buildSet {
+        table.getNeighbors(pos).forEach {
+            if (adjacentIf(value, it.value)) {
+                add(Pos(it.column, it.row))
+            }
+        }
+    }
+}
+
+/**
+ * Uses breadth-first search on a table to find the shortest path between
+ * two table entries matching a predicate.
+ * isAdjacent() is a function which tests a table entry (first param) and its neighbor (second param)
+ * to determine whether it should be adjacent
+ */
+fun <V> HashBasedTable<Int, Int, V>.shortestPath(
+    sourcePredicate: (V) -> Boolean,
+    destinationPredicate: (V) -> Boolean,
+    isAdjacent: (V, V) -> Boolean
+): Int {
+    val visited = mutableSetOf<Pos>()
+    val start = this.asSequence().first { sourcePredicate(it.value) }
+        .pos()
+        .let { Step(it, 0) }
+
+    val queue = ArrayDeque<Step>().apply { add(start) }
+    visited.add(start.pos)
+
+    while (queue.isNotEmpty()) {
+        val step = queue.removeFirst()
+
+        if (destinationPredicate(this.getEntry(step.pos)!!.value)) {
+            return step.distance
+        } else {
+            this.getAdjacent(step.pos, isAdjacent)
+                .filterNot { it in visited }
+                .map { step.toward(it) }
+                .forEach {
+                    queue.addLast(it)
+                    visited.add(it.pos)
+                }
+        }
+    }
+
+    error("No path found matching predicate")
+}
+
+data class Step(
+    val pos: Pos, val
+    distance: Int
+) {
+    fun toward(pos: Pos) = this.copy(pos = pos, distance = distance + 1)
+}

@@ -141,3 +141,5 @@ class TableEntry<R, C, V>(
     val column: C,
     val value: V
 )
+
+fun <V> TableEntry<Int, Int, V>.pos() = Pos(this.column, this.row)

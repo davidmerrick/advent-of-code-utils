@@ -2,6 +2,7 @@ package io.github.davidmerrick.aoc.guava
 
 import com.google.common.collect.HashBasedTable
 import io.github.davidmerrick.aoc.coordinates.Pos
+import io.github.davidmerrick.aoc.coordinates.Range
 import io.github.davidmerrick.aoc.coordinates.manhattanDistance
 
 fun <R, C, V> HashBasedTable<R, C, V>.rowList(row: R): List<V> {
@@ -21,6 +22,16 @@ fun <V> HashBasedTable<Int, Int, V>.fill(width: Int, height: Int, value: V) {
         }
     }
 }
+
+fun <V> HashBasedTable<Int, Int, V>.fill(start: Pos, end: Pos, value: V) {
+    for (row in start.y..end.y) {
+        for (column in start.x..end.x) {
+            this.put(row, column, value)
+        }
+    }
+}
+
+fun <V> HashBasedTable<Int, Int, V>.fill(range: Range, value: V) = fill(range.start, range.end, value)
 
 /**
  * Behaves similarly to Kotlin's Map.compute().

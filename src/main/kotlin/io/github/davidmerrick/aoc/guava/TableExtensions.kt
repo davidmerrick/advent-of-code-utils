@@ -175,6 +175,8 @@ fun <V> HashBasedTable<Int, Int, V>.getAdjacent(pos: Pos, adjacentIf: (V, V) -> 
     }
 }
 
+fun <V> HashBasedTable<Int, Int, V>.put(pos: Pos, value: V) = this.put(pos.y, pos.x, value)
+
 /**
  * Uses breadth-first search on a table to find the shortest path between
  * two table entries matching a predicate.

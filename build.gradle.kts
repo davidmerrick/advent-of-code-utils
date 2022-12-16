@@ -12,6 +12,7 @@ plugins {
 
 dependencies {
     implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.github.shiguruikai:combinatoricskt:1.6.0")
 
     testImplementation("org.spekframework.spek2:spek-runner-junit5:2.0.18")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")

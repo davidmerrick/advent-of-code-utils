@@ -31,6 +31,22 @@ fun <V> HashBasedTable<Int, Int, V>.fill(start: Pos, end: Pos, value: V) {
     }
 }
 
+/**
+ * Only fills empty cells in the range
+ */
+fun <V> HashBasedTable<Int, Int, V>.fillEmpty(start: Pos, end: Pos, value: V) {
+    val minX = minOf(start.x, end.x)
+    val minY = minOf(start.y, end.y)
+    val maxX = maxOf(start.x, end.x)
+    val maxY = maxOf(start.y, end.y)
+
+    for (row in minY..maxY) {
+        for (column in minX..maxX) {
+            lookup(row, column) ?: this.put(row, column, value)
+        }
+    }
+}
+
 fun <R, C, V> HashBasedTable<R, C, V>.lookup(row: R, column: C): V? {
     return if (this.contains(row, column)) {
         this.get(row, column)

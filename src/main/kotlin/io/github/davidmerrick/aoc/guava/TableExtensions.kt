@@ -31,6 +31,14 @@ fun <V> HashBasedTable<Int, Int, V>.fill(start: Pos, end: Pos, value: V) {
     }
 }
 
+fun <R, C, V> HashBasedTable<R, C, V>.lookup(row: R, column: C): V? {
+    return if (this.contains(row, column)) {
+        this.get(row, column)
+    } else null
+}
+
+fun <V> HashBasedTable<Int, Int, V>.lookup(pos: Pos) = lookup(pos.y, pos.x)
+
 fun <V> HashBasedTable<Int, Int, V>.fill(range: Range, value: V) = fill(range.start, range.end, value)
 
 /**

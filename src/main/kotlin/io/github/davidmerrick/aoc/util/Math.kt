@@ -47,3 +47,17 @@ fun Collection<Int>.lcm(): Int {
     }
     return max
 }
+
+/**
+ * Convert an int to a number of any other base.
+ * Has an optional mapper for the remainder
+ */
+fun Int.toBase(base: Int): String {
+    require(base > 0)
+    return generateSequence(this) { it / base }
+        .takeWhile { it > 0 }
+        .map { it % base }
+        .toList()
+        .reversed()
+        .joinToString("")
+}

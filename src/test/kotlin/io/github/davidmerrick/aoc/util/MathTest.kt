@@ -1,7 +1,9 @@
 package io.github.davidmerrick.aoc.util
 
 import io.kotlintest.shouldBe
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestFactory
 
 class MathTest {
 
@@ -15,5 +17,17 @@ class MathTest {
     @Test
     fun `Product test`() {
         listOf(1, 2, 3).product() shouldBe 6
+    }
+
+    @TestFactory
+    fun `Convert base 5`() = listOf(
+        3 to "3",
+        5 to "10",
+        10 to "20",
+        13 to "23",
+    ).map { (input, expected) ->
+        dynamicTest("Convert $input to base 5") {
+            input.toBase(5) shouldBe expected
+        }
     }
 }

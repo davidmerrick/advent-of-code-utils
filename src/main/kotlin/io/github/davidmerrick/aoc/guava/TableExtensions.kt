@@ -228,7 +228,7 @@ fun <V> HashBasedTable<Int, Int, V>.shortestPath(
         .pos()
         .let { Step(it, 0) }
 
-    val queue = ArrayDeque<Step>().apply { add(start) }
+    val queue = ArrayDeque<Step<Pos>>().apply { add(start) }
     visited.add(start.pos)
 
     while (queue.isNotEmpty()) {
@@ -250,9 +250,9 @@ fun <V> HashBasedTable<Int, Int, V>.shortestPath(
     error("No path found matching predicate")
 }
 
-data class Step(
-    val pos: Pos, val
-    distance: Int
+data class Step<V : Any>(
+    val pos: V,
+    val distance: Int
 ) {
-    fun toward(pos: Pos) = this.copy(pos = pos, distance = distance + 1)
+    fun toward(pos: V) = this.copy(pos = pos, distance = distance + 1)
 }

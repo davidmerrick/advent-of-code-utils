@@ -256,3 +256,12 @@ data class Step<V : Any>(
 ) {
     fun toward(pos: V) = this.copy(pos = pos, distance = distance + 1)
 }
+
+/**
+ * Collect a sequence of table entries into a table
+ */
+fun <R, C, V> Sequence<TableEntry<R, C, V>>.toTable(): HashBasedTable<R, C, V> {
+    val table = HashBasedTable.create<R, C, V>()
+    this.forEach { table.put(it.row, it.column, it.value) }
+    return table
+}

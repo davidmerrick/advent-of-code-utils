@@ -64,4 +64,10 @@ class TableExtensionsTest {
         neighbors.size shouldBe 3
         neighbors.map { it.value } shouldContainAll listOf('S', 'b', 'b')
     }
+
+    @Test
+    fun `Get with default`(){
+        val table = HashBasedTable.create<Int, Int, String>()
+        table.get(1, 2, "foo") shouldBe "foo"
+    }
 }

@@ -76,9 +76,12 @@ fun <V> HashBasedTable<Int, Int, V>.compute(
     }
 }
 
-fun <R, C, V> HashBasedTable<R, C, V>.print(valueTransform: (V) -> String = { it.toString() }) = buildString {
+fun <R, C, V> HashBasedTable<R, C, V>.print(
+    valueTransform: (V) -> String = { it.toString() },
+    rowTransform: (Map<C, V>) -> Map<C, V> = { it }
+) = buildString {
     rowMap().map { it.value }.forEach { row ->
-        row.map { valueTransform(it.value) }.forEach { append(it) }
+        rowTransform(row).map { valueTransform(it.value) }.forEach { append(it) }
         append("\n")
     }
 }
@@ -209,6 +212,38 @@ fun <V> HashBasedTable<Int, Int, V>.getAdjacent(pos: Pos, adjacentIf: (V, V) -> 
         }
     }
 }
+
+/**
+ * Add a default to get
+ */
+fun <R, C, V> HashBasedTable<R, C, V>.get(row: R, column: C, default: V? = null): V? {
+    return this.get(row, column) ?: default
+}
+
+fun <V> HashBasedTable<Int, Int, V>.containsAny(positions: Collection<Pos>): Boolean {
+    return positions.any { this.contains(it) }
+}
+
+fun <V> HashBasedTable<Int, Int, V>.containsAny(positions: Collection<Pos>, value: V): Boolean {
+    return positions.any {
+        val cell = this.get(it)
+        cell != null && cell == value
+    }
+}
+
+fun <V> HashBasedTable<Int, Int, V>.get(pos: Pos): V? {
+    return this.get(pos.y, pos.x)
+}
+
+
+fun <V> HashBasedTable<Int, Int, V>.contains(pos: Pos): Boolean {
+    return this.contains(pos.y, pos.x)
+}
+
+fun <V> HashBasedTable<Int, Int, V>.putAll(positions: Collection<Pos>, value: V) {
+    positions.forEach { this.put(it, value) }
+}
+
 
 fun <V> HashBasedTable<Int, Int, V>.put(pos: Pos, value: V) = this.put(pos.y, pos.x, value)
 

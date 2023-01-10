@@ -1,9 +1,9 @@
 package io.github.davidmerrick.aoc.guava
 
 import com.google.common.collect.HashBasedTable
+import io.github.davidmerrick.aoc.coordinates.IntPos
 import io.github.davidmerrick.aoc.coordinates.Pos
 import io.github.davidmerrick.aoc.coordinates.Range
-import io.github.davidmerrick.aoc.coordinates.manhattanDistance
 
 fun <R, C, V> HashBasedTable<R, C, V>.rowList(row: R): List<V> {
     require(this.rowMap().containsKey(row))
@@ -23,7 +23,7 @@ fun <V> HashBasedTable<Int, Int, V>.fill(width: Int, height: Int, value: V) {
     }
 }
 
-fun <V> HashBasedTable<Int, Int, V>.fill(start: Pos, end: Pos, value: V) {
+fun <V> HashBasedTable<Int, Int, V>.fill(start: IntPos, end: IntPos, value: V) {
     for (row in start.y..end.y) {
         for (column in start.x..end.x) {
             this.put(row, column, value)
@@ -34,7 +34,7 @@ fun <V> HashBasedTable<Int, Int, V>.fill(start: Pos, end: Pos, value: V) {
 /**
  * Only fills empty cells in the range
  */
-fun <V> HashBasedTable<Int, Int, V>.fillEmpty(start: Pos, end: Pos, value: V) {
+fun <V> HashBasedTable<Int, Int, V>.fillEmpty(start: IntPos, end: IntPos, value: V) {
     val minX = minOf(start.x, end.x)
     val minY = minOf(start.y, end.y)
     val maxX = maxOf(start.x, end.x)
@@ -53,7 +53,7 @@ fun <R, C, V> HashBasedTable<R, C, V>.lookup(row: R, column: C): V? {
     } else null
 }
 
-fun <V> HashBasedTable<Int, Int, V>.lookup(pos: Pos) = lookup(pos.y, pos.x)
+fun <V> HashBasedTable<Int, Int, V>.lookup(pos: IntPos) = lookup(pos.y, pos.x)
 
 fun <V> HashBasedTable<Int, Int, V>.fill(range: Range, value: V) = fill(range.start, range.end, value)
 
@@ -102,7 +102,7 @@ fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
     return buildList {
         for (r in row - 1..row + 1) {
             for (c in column - 1..column + 1) {
-                if (Pos(r, c).manhattanDistance(Pos(row, column)) > 1 && !includeDiagonals) continue
+                if (IntPos(r, c).manhattanDistance(IntPos(row, column)) > 1 && !includeDiagonals) continue
                 if (r == row && c == column) continue
                 getEntry(r, c)?.let { this.add(it) }
             }
@@ -111,7 +111,7 @@ fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
 }
 
 fun <V> HashBasedTable<Int, Int, V>.getNeighbors(
-    pos: Pos,
+    pos: IntPos,
     includeDiagonals: Boolean = false
 ) = getNeighbors(pos.y, pos.x, includeDiagonals)
 
@@ -121,7 +121,7 @@ fun <R, C, V> HashBasedTable<R, C, V>.getEntry(row: R, column: C): TableEntry<R,
     }
 }
 
-fun <V> HashBasedTable<Int, Int, V>.getEntry(pos: Pos): TableEntry<Int, Int, V>? {
+fun <T : Number, V> HashBasedTable<T, T, V>.getEntry(pos: Pos<T>): TableEntry<T, T, V>? {
     return this.getEntry(pos.y, pos.x)
 }
 
@@ -184,7 +184,7 @@ data class TableEntry<R, C, V>(
     val value: V
 )
 
-fun <V> TableEntry<Int, Int, V>.pos() = Pos(this.column, this.row)
+fun <V> TableEntry<Int, Int, V>.pos() = IntPos(this.column, this.row)
 
 data class Path<V>(
     val steps: List<TableEntry<Int, Int, V>> = listOf()
@@ -201,13 +201,13 @@ data class Path<V>(
     }
 }
 
-fun <V> HashBasedTable<Int, Int, V>.getAdjacent(pos: Pos, adjacentIf: (V, V) -> Boolean): Set<Pos> {
+fun <V> HashBasedTable<Int, Int, V>.getAdjacent(pos: IntPos, adjacentIf: (V, V) -> Boolean): Set<IntPos> {
     val table = this
     val value = table.get(pos.y, pos.x)!!
     return buildSet {
         table.getNeighbors(pos).forEach {
             if (adjacentIf(value, it.value)) {
-                add(Pos(it.column, it.row))
+                add(IntPos(it.column, it.row))
             }
         }
     }
@@ -220,32 +220,31 @@ fun <R, C, V> HashBasedTable<R, C, V>.get(row: R, column: C, default: V? = null)
     return this.get(row, column) ?: default
 }
 
-fun <V> HashBasedTable<Int, Int, V>.containsAny(positions: Collection<Pos>): Boolean {
+fun <T : Number, V> HashBasedTable<T, T, V>.get(pos: Pos<T>): V? {
+    return this.get(pos.y, pos.x)
+}
+
+fun <T : Number, V> HashBasedTable<T, T, V>.contains(pos: Pos<T>): Boolean {
+    return this.contains(pos.y, pos.x)
+}
+
+fun <T : Number, V> HashBasedTable<T, T, V>.containsAny(positions: Collection<Pos<T>>): Boolean {
     return positions.any { this.contains(it) }
 }
 
-fun <V> HashBasedTable<Int, Int, V>.containsAny(positions: Collection<Pos>, value: V): Boolean {
+fun <T : Number, V> HashBasedTable<T, T, V>.containsAny(positions: Collection<Pos<T>>, value: V): Boolean {
     return positions.any {
-        val cell = this.get(it)
+        val cell = this.get(it.y, it.x)
         cell != null && cell == value
     }
 }
 
-fun <V> HashBasedTable<Int, Int, V>.get(pos: Pos): V? {
-    return this.get(pos.y, pos.x)
+fun <T : Number, V> HashBasedTable<T, T, V>.putAll(positions: Collection<Pos<T>>, value: V) {
+    positions.forEach { this.put(it.y, it.x, value) }
 }
 
 
-fun <V> HashBasedTable<Int, Int, V>.contains(pos: Pos): Boolean {
-    return this.contains(pos.y, pos.x)
-}
-
-fun <V> HashBasedTable<Int, Int, V>.putAll(positions: Collection<Pos>, value: V) {
-    positions.forEach { this.put(it, value) }
-}
-
-
-fun <V> HashBasedTable<Int, Int, V>.put(pos: Pos, value: V) = this.put(pos.y, pos.x, value)
+fun <T : Number, V> HashBasedTable<T, T, V>.put(pos: Pos<T>, value: V) = this.put(pos.y, pos.x, value)
 
 /**
  * Uses breadth-first search on a table to find the shortest path between
@@ -258,12 +257,12 @@ fun <V> HashBasedTable<Int, Int, V>.shortestPath(
     destinationPredicate: (V) -> Boolean,
     isAdjacent: (V, V) -> Boolean
 ): Int {
-    val visited = mutableSetOf<Pos>()
+    val visited = mutableSetOf<IntPos>()
     val start = this.asSequence().first { sourcePredicate(it.value) }
         .pos()
         .let { Step(it, 0) }
 
-    val queue = ArrayDeque<Step<Pos>>().apply { add(start) }
+    val queue = ArrayDeque<Step<IntPos>>().apply { add(start) }
     visited.add(start.pos)
 
     while (queue.isNotEmpty()) {

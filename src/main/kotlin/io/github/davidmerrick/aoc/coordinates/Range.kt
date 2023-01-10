@@ -4,7 +4,7 @@ package io.github.davidmerrick.aoc.coordinates
  * Defines a range of positions
  * from start (inclusive) to end (inclusive)
  */
-data class Range(val start: Pos, val end: Pos) {
+data class Range(val start: IntPos, val end: IntPos) {
     val minX = minOf(start.x, end.x)
     val minY = minOf(start.y, end.y)
 
@@ -20,24 +20,24 @@ data class Range(val start: Pos, val end: Pos) {
         maxX: Int = this.maxX,
         minY: Int = this.minY,
         maxY: Int = this.maxY
-    ): Sequence<Pos> {
+    ): Sequence<IntPos> {
         return buildList {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
-                    add(Pos(x, y))
+                    add(IntPos(x, y))
                 }
             }
         }.asSequence()
     }
 
     companion object {
-        fun of(positions: Collection<Pos>): Range {
+        fun of(positions: Collection<IntPos>): Range {
             return Range(
-                Pos(
+                IntPos(
                     positions.minOf { it.x },
                     positions.minOf { it.y },
                 ),
-                Pos(
+                IntPos(
                     positions.maxOf { it.x },
                     positions.maxOf { it.y },
                 )

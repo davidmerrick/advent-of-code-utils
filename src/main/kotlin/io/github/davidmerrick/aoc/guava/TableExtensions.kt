@@ -169,10 +169,14 @@ fun <V> HashBasedTable<Int, Int, V>.rowRange(
 }
 
 fun <V> parseTable(input: List<List<V>>): HashBasedTable<Int, Int, V> {
+    return parseTable(input) { it }
+}
+
+fun <V> parseTable(input: List<List<V>>, valueTransform: (V) -> V): HashBasedTable<Int, Int, V> {
     val table = HashBasedTable.create<Int, Int, V>()
     for (row in input.indices) {
         for (column in input[0].indices) {
-            table.put(row, column, input[row][column])
+            table.put(row, column, valueTransform(input[row][column]))
         }
     }
     return table

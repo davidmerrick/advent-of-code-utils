@@ -175,7 +175,7 @@ fun <V> parseTable(input: List<List<V>>): HashBasedTable<Int, Int, V> {
 fun <V> parseTable(input: List<List<V>>, valueTransform: (V) -> V): HashBasedTable<Int, Int, V> {
     val table = HashBasedTable.create<Int, Int, V>()
     for (row in input.indices) {
-        for (column in input[0].indices) {
+        for (column in input[row].indices) {
             table.put(row, column, valueTransform(input[row][column]))
         }
     }
@@ -303,3 +303,9 @@ fun <R, C, V> Sequence<TableEntry<R, C, V>>.toTable(): HashBasedTable<R, C, V> {
     this.forEach { table.put(it.row, it.column, it.value) }
     return table
 }
+
+fun <V> HashBasedTable<Int, Int, V>.minRow() = this.asSequence().minOf { it.row }
+fun <V> HashBasedTable<Int, Int, V>.maxRow() = this.asSequence().maxOf { it.row }
+
+fun <V> HashBasedTable<Int, Int, V>.minColumn() = this.asSequence().minOf { it.column }
+fun <V> HashBasedTable<Int, Int, V>.maxColumn() = this.asSequence().maxOf { it.column }

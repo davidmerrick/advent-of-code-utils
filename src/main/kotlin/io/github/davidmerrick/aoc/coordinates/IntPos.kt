@@ -50,3 +50,5 @@ data class IntPos(override val x: Int, override val y: Int) : Pos<Int> {
 }
 
 operator fun IntPos.plus(move: Move) = IntPos(this.x + move.dx, this.y + move.dy)
+operator fun IntPos.plus(other: IntPos) = IntPos(this.x + other.x, this.y + other.y)
+operator fun IntPos.minus(other: IntPos) = IntPos(this.x - other.x, this.y - other.y)

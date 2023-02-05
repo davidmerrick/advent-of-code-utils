@@ -30,4 +30,4 @@ fun String.getPalindromes(length: Int): List<String> {
 }
 fun String.extractInts(delimiter: String = ""): List<Int> = this.split(delimiter).mapNotNull { it.toIntOrNull() }
 
-
+fun String.isNumber() = this.toIntOrNull() != null

@@ -172,8 +172,8 @@ fun <V> parseTable(input: List<List<V>>): HashBasedTable<Int, Int, V> {
     return parseTable(input) { it }
 }
 
-fun <V> parseTable(input: List<List<V>>, valueTransform: (V) -> V): HashBasedTable<Int, Int, V> {
-    val table = HashBasedTable.create<Int, Int, V>()
+fun <T, U> parseTable(input: List<List<T>>, valueTransform: (T) -> U): HashBasedTable<Int, Int, U> {
+    val table = HashBasedTable.create<Int, Int, U>()
     for (row in input.indices) {
         for (column in input[row].indices) {
             table.put(row, column, valueTransform(input[row][column]))

@@ -53,6 +53,12 @@ operator fun IntPos.plus(move: Move) = IntPos(this.x + move.dx, this.y + move.dy
 operator fun IntPos.plus(other: IntPos) = IntPos(this.x + other.x, this.y + other.y)
 operator fun IntPos.minus(other: IntPos) = IntPos(this.x - other.x, this.y - other.y)
 
+fun IntPos.getNeighbors(includeDiagonals: Boolean = false): List<IntPos> {
+    return generatePositions(this.x - 1..this.x + 1, this.y - 1..this.y + 1)
+        .filterNot { it.x == this.x && it.y == this.y }
+        .filter { (it.x == this.x || it.y == this.y) || includeDiagonals }
+}
+
 fun generatePositions(xRange: IntRange, yRange: IntRange): List<IntPos> {
     return buildList {
         for (x in xRange) {

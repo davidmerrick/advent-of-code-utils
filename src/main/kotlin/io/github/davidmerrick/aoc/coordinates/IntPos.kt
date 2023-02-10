@@ -52,3 +52,16 @@ data class IntPos(override val x: Int, override val y: Int) : Pos<Int> {
 operator fun IntPos.plus(move: Move) = IntPos(this.x + move.dx, this.y + move.dy)
 operator fun IntPos.plus(other: IntPos) = IntPos(this.x + other.x, this.y + other.y)
 operator fun IntPos.minus(other: IntPos) = IntPos(this.x - other.x, this.y - other.y)
+
+fun generatePositions(xRange: IntRange, yRange: IntRange): List<IntPos> {
+    return buildList {
+        for (x in xRange) {
+            for (y in yRange) {
+                add(IntPos(x, y))
+            }
+        }
+    }
+}
+
+fun generatePositions(x: Int, yRange: IntRange) = generatePositions(x..x, yRange)
+fun generatePositions(xRange: IntRange, y: Int) = generatePositions(xRange, y..y)

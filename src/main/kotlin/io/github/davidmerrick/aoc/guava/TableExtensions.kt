@@ -290,7 +290,7 @@ fun <V> HashBasedTable<Int, Int, V>.shortestPath(
 
 data class Step<V : Any>(
     val pos: V,
-    val distance: Int
+    val distance: Int = 0
 ) {
     fun toward(pos: V) = this.copy(pos = pos, distance = distance + 1)
 }

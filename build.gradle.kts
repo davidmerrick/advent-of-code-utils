@@ -11,6 +11,15 @@ plugins {
     kotlin("jvm") version "1.7.20"
 }
 
+reckon {
+    snapshots()
+    setStageCalc(calcStageFromProp())
+    setScopeCalc(
+        calcScopeFromProp()
+            .or(calcScopeFromCommitMessages())
+    )
+}
+
 dependencies {
     implementation("com.google.guava:guava:31.1-jre")
     implementation("com.github.shiguruikai:combinatoricskt:1.6.0")
@@ -20,15 +29,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-}
-
-reckon {
-    snapshots()
-    setStageCalc(calcStageFromProp())
-    setScopeCalc(
-        calcScopeFromProp()
-            .or(calcScopeFromCommitMessages())
-    )
 }
 
 tasks {

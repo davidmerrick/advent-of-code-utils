@@ -1,6 +1,6 @@
-on:
-  push:
-    branch: main
+#on:
+#  push:
+#    branch: main
 
 name: Create Release
 

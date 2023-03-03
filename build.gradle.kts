@@ -6,6 +6,7 @@ repositories {
 }
 
 plugins {
+    id("org.ajoberstar.reckon") version "0.16.1"
     `maven-publish`
     kotlin("jvm") version "1.7.20"
 }
@@ -19,6 +20,15 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+}
+
+reckon {
+    snapshots()
+    setStageCalc(calcStageFromProp())
+    setScopeCalc(
+        calcScopeFromProp()
+            .or(calcScopeFromCommitMessages())
+    )
 }
 
 tasks {

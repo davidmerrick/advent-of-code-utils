@@ -36,3 +36,9 @@ At the time of this writing, you can do that by going to GitHub -> Account -> Se
 In your project's environment variables, set `GITHUB_ACTOR` to your GitHub username, and `GITHUB_TOKEN` to the token you just generated.
 
 You should now be able to use methods from this project. Happy coding.
+
+# Versioning
+
+This project uses [reckon](https://github.com/ajoberstar/reckon) for versioning.
+By default, any new commits will result in minor version bumps.
+To do a major version bump, prefix your commit message with `major:`.

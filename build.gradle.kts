@@ -25,9 +25,9 @@ dependencies {
     implementation("com.github.shiguruikai:combinatoricskt:1.6.0")
 
     testImplementation("org.spekframework.spek2:spek-runner-junit5:2.0.18")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
 }
 
